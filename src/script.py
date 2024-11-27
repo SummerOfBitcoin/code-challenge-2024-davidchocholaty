@@ -75,6 +75,7 @@ class Script:
                 
                 # Handle opcodes
                 op_name = list(OP_CODES.keys())[list(OP_CODES.values()).index(op)]
+                
                 i += self._execute_opcode(op_name)
             
             # Script executed successfully if stack is not empty and top value is true
@@ -257,7 +258,7 @@ class Script:
             return 1
 
     @staticmethod
-    def combine_scripts(*scripts: Union[bytes, 'Script'], json_transaction: dict, segwit: bool = False) -> 'Script':
+    def combine_scripts(*scripts: Union[bytes, 'Script'], json_transaction: dict, input_index: int = 0, segwit: bool = False) -> 'Script':
         """
         Combine multiple scripts into a single script.
         Accepts both bytes and Script objects.
@@ -270,4 +271,4 @@ class Script:
                 combined.extend(script)
             else:
                 raise InvalidScriptException(f"Invalid script type: {type(script)}")
-        return Script(bytes(combined), json_transaction, segwit=segwit)
+        return Script(bytes(combined), json_transaction, input_index=input_index, segwit=segwit)
